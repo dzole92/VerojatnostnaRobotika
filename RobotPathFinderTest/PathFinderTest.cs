@@ -26,6 +26,7 @@ namespace RobotPathFinderTest
             node.Index?.Y.ShouldEqual(2);
             node.IsUnavailable.HasValue.ShouldBeTrue();
             node.IsUnavailable?.ShouldBeTrue();
+            node.Parent.ShouldBeNull();
         }
 
         [TestMethod]
@@ -39,6 +40,7 @@ namespace RobotPathFinderTest
             node.IsInitialized.ShouldBeFalse();
             node.IsUnavailable.ShouldBeNull();
             node.Index.ShouldBeNull();
+            node.Parent.ShouldBeNull();
         }
 
         [TestMethod]

@@ -13,6 +13,7 @@ namespace RobotPathFinder
         public int Id { get; set; }
         public NodePosition? Index { get; set; }
         public bool? IsUnavailable { get; set; }
+        public Node Parent { get; set; }
 
         public void Initialize(int id, NodePosition index, bool isUnavailable)
         {
