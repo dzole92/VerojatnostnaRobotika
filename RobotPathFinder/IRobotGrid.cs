@@ -11,6 +11,9 @@ namespace RobotPathFinder {
 		List<Node> OpenNodes { get; }
 		List<Node> ClosedNodes { get; }
 		bool IsInitialized { get; }
+		int HorizontalCost { get; }
+		int VerticalCost { get; }
+		int DiagonalCost { get; }
 
 		void Initialize(int x, int y, int horizontalCost, int verticalCost, int diagonalCost);
 
@@ -18,7 +21,7 @@ namespace RobotPathFinder {
 
 		bool CalculateHeruisticFromNode(Node node);
 
-		bool CalculateGnFromNode(Node node);
+		bool CalculateGnFromNode(Node node, Node currentNode);
 
 		Node SelectNextNode(Node currentNode);
 

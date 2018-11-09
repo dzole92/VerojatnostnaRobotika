@@ -17,7 +17,7 @@ namespace RobotPathFinder
 		public int Hn { get; set; }
 		public int Gn { get; set; }
 		public int Fn => Hn + Gn;
-		public IEnumerable<Node> Neighbours { get; private set; }
+		public List<Node> Neighbours { get; } = new List<Node>();
 
 		public NodePosition Position {
 			get {
@@ -26,7 +26,20 @@ namespace RobotPathFinder
 			}
 		}
 
-		public void SetNeighbours(IEnumerable<Node> neighbours) { Neighbours = neighbours; }
+		public void SetNeighbours(List<Node> neighbours, IRobotGrid grid) {
+			neighbours.AsParallel().ForAll(x => {
+				if(x.Parent == null && x.IsInitialized) { 
+					Neighbours.Add(x);
+					return;
+				}
+				var oldGn = x.Gn;
+				if (x.CalculateGnFromNode(this, grid) < oldGn)
+					x.Parent = this;
+				else
+					x.Gn = oldGn;
+				Neighbours.Add(x);
+			});
+		}
 		public void Setparent(Node parent) { Parent = parent; }
 
 		public void Initialize(int id, NodePosition index, bool isUnavailable)
@@ -36,5 +49,21 @@ namespace RobotPathFinder
             IsUnavailable = isUnavailable;
             IsInitialized = true;
         }
-    }
+
+		public override bool Equals(object obj) {
+			if (obj != null && typeof(Node) == obj.GetType()) return ((Node)obj).Id == Id;
+			return false;
+
+		}
+
+
+	}
+
+	public class NodeComparer : IEqualityComparer<Node> {
+
+		public bool Equals(Node x, Node y) => y != null && x != null && x.Id == y.Id;
+
+		public int GetHashCode(Node obj) { throw new NotImplementedException(); }
+
+	}
 }
