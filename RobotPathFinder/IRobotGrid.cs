@@ -8,19 +8,21 @@ namespace RobotPathFinder {
 		Node StartNode { get; }
 		Node EndNode { get; }
 		Node[,] AllNodes { get; }
-		IEnumerable<Node> OpenNodes { get; }
-		IEnumerable<Node> ClosedNodes { get; }
+		List<Node> OpenNodes { get; }
+		List<Node> ClosedNodes { get; }
 		bool IsInitialized { get; }
 
 		void Initialize(int x, int y, int horizontalCost, int verticalCost, int diagonalCost);
 
-		IEnumerable<Node> FindNeighbours(Node node);
+		List<Node> FindNeighbours(Node currentNode);
 
 		bool CalculateHeruisticFromNode(Node node);
 
 		bool CalculateGnFromNode(Node node);
 
 		Node SelectNextNode(Node currentNode);
+
+		List<Node> FindPath(Node start, Node end);
 
 	}
 }

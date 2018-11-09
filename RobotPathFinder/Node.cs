@@ -19,6 +19,13 @@ namespace RobotPathFinder
 		public int Fn => Hn + Gn;
 		public IEnumerable<Node> Neighbours { get; private set; }
 
+		public NodePosition Position {
+			get {
+				if (!Index.HasValue) throw new Exception("Node is not set");
+				return Index.Value;
+			}
+		}
+
 		public void SetNeighbours(IEnumerable<Node> neighbours) { Neighbours = neighbours; }
 		public void Setparent(Node parent) { Parent = parent; }
 
