@@ -129,7 +129,7 @@ namespace RobotPathFinderTest
 			});
 			grid.SelectNextNode(Arg.Any<Node>()).Returns(x => {
 				grid.FindNeighbours(currentNode);
-				node1.Setparent(currentNode);
+				node1.SetParent(currentNode);
 				return node1;
 			});
 

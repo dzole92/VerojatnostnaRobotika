@@ -33,14 +33,16 @@ namespace RobotPathFinder
 					return;
 				}
 				var oldGn = x.Gn;
-				if (x.CalculateGnFromNode(this, grid) < oldGn)
-					x.Parent = this;
+				if (x.CalculateGnFromNode(this, grid) < oldGn) {
+					x.Parent.Neighbours.Remove(x);
+					x.SetParent(this);
+					Neighbours.Add(x);
+				}
 				else
 					x.Gn = oldGn;
-				Neighbours.Add(x);
 			});
 		}
-		public void Setparent(Node parent) { Parent = parent; }
+		public void SetParent(Node parent) { Parent = parent; }
 
 		public void Initialize(int id, NodePosition index, bool isUnavailable)
         {
@@ -56,6 +58,7 @@ namespace RobotPathFinder
 
 		}
 
+		public override int GetHashCode() { return Id; }
 
 	}
 

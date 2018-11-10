@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace RobotPathFinder {
 	public class RobotGrid : IRobotGrid {
@@ -52,7 +53,7 @@ namespace RobotPathFinder {
 			currentNode.NeighboursIndexes(SizeX, SizeY).AsParallel().ForAll(p => {
 				if(AllNodes[p.X, p.Y].IsInitialized && !(AllNodes[p.X, p.Y].IsUnavailable ?? false)) actualNeighbours.Add(AllNodes[p.X, p.Y]);
 			});
-			var neighboursList = actualNeighbours.Where(x=> x.Parent == null || !Equals(x.Parent, currentNode.Parent)).OrderBy(x => x.Id).ToList();
+			var neighboursList = actualNeighbours.Where(x=> !ClosedNodes.Contains(x, nodeComparer) && x.Parent == null || !Equals(x.Parent, currentNode.Parent)).OrderBy(x => x.Id).ToList();
 			OpenNodes.AddRange(neighboursList.Where(x=> !OpenNodes.Contains(x, nodeComparer)));
 			currentNode.SetNeighbours(neighboursList, this);
 			return currentNode.Neighbours;
@@ -83,7 +84,13 @@ namespace RobotPathFinder {
 			node.Gn = newGn;
 			return true;
 		}
-		public Node SelectNextNode(Node currentNode) { throw new System.NotImplementedException(); }
+
+		public Node SelectNextNode(Node currentNode) {
+			if(!IsInitialized) throw new Exception("Grid is not initialized");
+			if (FindNeighbours(currentNode).Count > 0)
+				return currentNode.Neighbours.OrderBy(x => x.Fn).ThenBy(x => x.Id).First(x => x.Parent.Equals(currentNode));
+			return OpenNodes.LastOrDefault();
+		}
 
 		public List<Node> FindPath(Node start, Node end) {
 			if(!IsInitialized) throw new Exception("First you need to Initialize the grid.");
@@ -91,12 +98,23 @@ namespace RobotPathFinder {
 			StartNode = start;
 			EndNode = end;
 
-			ClosedNodes.Add(StartNode);
-			var t = FindNeighbours(StartNode); 
-			OpenNodes.AddRange(FindNeighbours(StartNode));
+			var currentNode = StartNode;
+			while (currentNode != null && currentNode.Fn > 1) {
+				ClosedNodes.Add(currentNode);
+				currentNode = SelectNextNode(currentNode);
+			}
 
-			//TODO: Not finished
-			return null;
+			if(currentNode == null) throw new Exception("Cannot reach the end.");
+			EndNode?.SetParent(currentNode);
+			var pathList = new List<Node>();
+			var nod = EndNode;
+			while (nod != null && nod.Equals(StartNode)) {
+				pathList.Add(nod);
+				nod = nod.Parent;
+			}
+			pathList.Add(StartNode);
+
+			return pathList;
 		}
 
 	}
