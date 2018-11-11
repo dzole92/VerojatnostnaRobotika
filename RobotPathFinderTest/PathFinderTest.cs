@@ -98,19 +98,15 @@ namespace RobotPathFinderTest
 			var grid = Substitute.For<IRobotGrid>();
 			Node node = Substitute.For<Node>();
 			
-			IEnumerable<Node> nodes = dummyNodes();
-			node.When(y => y.SetNeighbours(nodes)).Do(z => node.Neighbours.Returns(nodes));
-			grid.FindNeighbours(node).Returns(x=> {
-				node.SetNeighbours(nodes);
-				return nodes;
-			});
+			List<Node> nodes = dummyNodes().ToList();
+            grid.FindNeighbours(Arg.Any<Node>()).Returns(nodes);
+
 			// ACT
 			var neighbours = grid.FindNeighbours(node);
 
 			// ASSERT
 			grid.Received(1).FindNeighbours(Arg.Any<Node>());
 			neighbours.Count().ShouldEqual(4);
-			node.Neighbours.ShouldEqual(neighbours);
 		}
 
         [TestMethod]
@@ -121,10 +117,10 @@ namespace RobotPathFinderTest
 			Node currentNode = Substitute.For<Node>();
 			Node node1 = Substitute.For<Node>();
 
-			IEnumerable<Node> nodes = dummyNodes();
-			currentNode.When(y => y.SetNeighbours(nodes)).Do(z => currentNode.Neighbours.Returns(nodes));
+			List<Node> nodes = dummyNodes().ToList();
+			currentNode.When(y => y.SetNeighbours(nodes, grid)).Do(z => currentNode.Neighbours.Returns(nodes));
 			grid.FindNeighbours(currentNode).Returns(x => {
-				currentNode.SetNeighbours(nodes);
+				currentNode.SetNeighbours(nodes, grid);
 				return nodes;
 			});
 			grid.SelectNextNode(Arg.Any<Node>()).Returns(x => {
@@ -147,13 +143,15 @@ namespace RobotPathFinderTest
 			// ARRANGE
 			var grid = Substitute.For<IRobotGrid>();
 			Node node = Substitute.For<Node>();
-			grid.CalculateHeruisticFromNode(node).Returns(x => { node.Hn.Returns(2);
+			grid.CalculateHeruisticFromNode(Arg.Any<Node>()).Returns(x =>
+			{
+			    node.Hn = 2;
 				return true;
 			});
 			// ACT
 			var t = grid.CalculateHeruisticFromNode(node);
 			// ASSERT
-			grid.Received(1).CalculateHeruisticFromNode(node);
+			grid.Received(1).CalculateHeruisticFromNode(Arg.Any<Node>());
 			node.Hn.ShouldEqual(2);
 			t.ShouldEqual(true);
 		}
@@ -164,14 +162,15 @@ namespace RobotPathFinderTest
 			// ARRANGE
 			var grid = Substitute.For<IRobotGrid>();
 			Node node = Substitute.For<Node>();
-			grid.CalculateGnFromNode(Arg.Is(node)).Returns(x => {
+			Node node1 = Substitute.For<Node>();
+			grid.CalculateGnFromNode(Arg.Any<Node>(), Arg.Any<Node>()).Returns(x => {
 				node.Gn = 2;
 				return true;
 			});
 			// ACT
-			var t = grid.CalculateGnFromNode(node);
+			var t = grid.CalculateGnFromNode(node, node1);
 			// ASSERT
-			grid.Received(1).CalculateGnFromNode(node);
+			grid.Received(1).CalculateGnFromNode(Arg.Any<Node>(), Arg.Any<Node>());
 			node.Gn.ShouldEqual(2);
 			t.ShouldEqual(true);
 		}
@@ -182,24 +181,36 @@ namespace RobotPathFinderTest
 			// ARRANGE
 			var grid = Substitute.For<IRobotGrid>();
 			Node node = Substitute.For<Node>();
-			grid.CalculateHeruisticFromNode(node).Returns(x => {
+			Node node1 = Substitute.For<Node>();
+			grid.CalculateHeruisticFromNode(Arg.Any<Node>()).Returns(x => {
 				node.Hn = 2;
 				return true;
 			});
-			grid.CalculateGnFromNode(node).Returns(x => {
+			grid.CalculateGnFromNode(Arg.Any<Node>(), Arg.Any<Node>()).Returns(x => {
 				node.Gn = 3;
 				return true;
 			});
 			// ACT
-			var t = grid.CalculateGnFromNode(node);
+			var t = grid.CalculateGnFromNode(node, node1);
 			var t1 = grid.CalculateHeruisticFromNode(node);
 			// ASSERT
-			grid.Received(1).CalculateGnFromNode(node);
+			grid.Received(1).CalculateGnFromNode(Arg.Any<Node>(), Arg.Any<Node>());
 			node.Gn.ShouldEqual(3);
 			t.ShouldEqual(true);
 			node.Fn.ShouldEqual(5);
 
 		}
+
+        [TestMethod]
+        public void AcctualFindPath()
+        {
+            // ARRANGE
+
+            // ACT
+
+            // ASSERT
+
+        }
 
         
 

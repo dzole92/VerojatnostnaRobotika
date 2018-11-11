@@ -68,8 +68,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="IRobotGrid.cs" />
-    <Compile Include="NodePosition.cs" />
     <Compile Include="PathFinderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
