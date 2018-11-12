@@ -26,6 +26,11 @@ namespace RobotPathFinder {
 		Node SelectNextNode(Node currentNode);
 
 		List<Node> FindPath(Node start, Node end);
+		List<Node> FindPath(NodePosition start, NodePosition end);
+		List<Node> FindPath(int startId, int endId);
+
+		void SetObstacles(NodePosition[] obstacalesPostions);
+		void SetObstacles(int[] obstacalesPostions);
 
 	}
 }

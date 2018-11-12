@@ -27,19 +27,20 @@ namespace RobotPathFinder
 		}
 
 		public void SetNeighbours(List<Node> neighbours, IRobotGrid grid) {
-			neighbours.AsParallel().ForAll(x => {
-				if(x.Parent == null && x.IsInitialized) { 
-					Neighbours.Add(x);
-					return;
-				}
-				var oldGn = x.Gn;
-				if (x.CalculateGnFromNode(this, grid) < oldGn) {
-					x.Parent.Neighbours.Remove(x);
+			neighbours.ForEach(x => {
+				if (x.Parent == null && x.IsInitialized && !x.Equals(grid.StartNode)) {
+					x.CalculateGnFromNode(this, grid);
+					x.CalculateHeruisticFromNode(grid);
 					x.SetParent(this);
-					Neighbours.Add(x);
+				} else {
+					var oldGn = x.Gn;
+					if (x.CalculateGnFromNode(this, grid) < oldGn)
+						x.SetParent(this);
+					else
+						x.Gn = oldGn;
 				}
-				else
-					x.Gn = oldGn;
+
+				if (!Neighbours.Contains(x, new NodeComparer())) Neighbours.Add(x);
 			});
 		}
 		public void SetParent(Node parent) { Parent = parent; }
@@ -66,7 +67,7 @@ namespace RobotPathFinder
 
 		public bool Equals(Node x, Node y) => y != null && x != null && x.Id == y.Id;
 
-		public int GetHashCode(Node obj) { throw new NotImplementedException(); }
+		public int GetHashCode(Node obj) { return obj.Id; }
 
 	}
 }

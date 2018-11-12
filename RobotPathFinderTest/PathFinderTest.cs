@@ -14,13 +14,8 @@ namespace RobotPathFinderTest
     {
 
 		private IRobotGrid dummyRobotGrid(){
-			var grid = Substitute.For<IRobotGrid>();
-			grid.SizeX.Returns(3);
-			grid.SizeY.Returns(3);
+			var grid = new RobotGrid(6, 7, 10, 10, 14);
 
-			Node[,] allNodes = new Node[3,3];
-
-			grid.AllNodes.Returns(allNodes);
 			return grid;
 		}
 
@@ -202,24 +197,76 @@ namespace RobotPathFinderTest
 		}
 
         [TestMethod]
-        public void AcctualFindPath()
-        {
-            // ARRANGE
+        public void AcctualFindPath() {
+			// ARRANGE
+			var grid = dummyRobotGrid();
+			grid.IsInitialized.ShouldBeTrue();
+			var startPosition = new NodePosition {X = 2, Y = 1};
+			var endPosition = new NodePosition {X = 5, Y = 4};
+			// ACT
+			var t = grid.FindPath(startPosition, endPosition);
+			// ASSERT
+			t.Count.ShouldEqual(4);
+			t.Select(x=> x.Id).ShouldEqual(new [] {14,21,28,35});
+		}
 
-            // ACT
+		[TestMethod]
+		public void SetObstacles() {
+			// ARRANGE
+			var grid = dummyRobotGrid();
+			grid.IsInitialized.ShouldBeTrue();
+			NodePosition[] obstacalesPostions = new [] {new NodePosition {X=2,Y=3}, new NodePosition {X=4, Y=1}, new NodePosition { X =4, Y =3}, new NodePosition { X =5, Y =3} };
 
-            // ASSERT
+			//ACT
+			grid.SetObstacles(obstacalesPostions);
 
-        }
+			//ASSERT
+			obstacalesPostions.ToList().ForEach(x => {
+				grid.AllNodes[x.X, x.Y].IsUnavailable?.ShouldBeTrue();
+			});
 
-        
+		}
 
-        
+		[TestMethod]
+		public void FindActualPathWithObstacles() {
+			// ARRANGE
+			var grid = dummyRobotGrid();
+			grid.IsInitialized.ShouldBeTrue();
+			var startPosition = new NodePosition { X = 2, Y = 1 };
+			var endPosition = new NodePosition { X = 5, Y = 4 };
+			NodePosition[] obstacalesPostions = new[] {new NodePosition { X = 2, Y = 3 }, new NodePosition { X = 4, Y = 1 }, new NodePosition { X = 4, Y = 3 }, new NodePosition { X = 5, Y = 3 } };
+			grid.SetObstacles(obstacalesPostions);
 
 
-        
+			//ACT
+			var t = grid.FindPath(startPosition, endPosition);
+
+			//ASSERT
+			t.Count.ShouldEqual(5);
+			t.Select(x => x.Id).ShouldEqual(new[] { 14, 15, 22, 29, 35 });
+		}
+
+		[TestMethod]
+		public void UseIdsActualPathFind() {
+			// ARRANGE
+			var grid = dummyRobotGrid();
+			grid.IsInitialized.ShouldBeTrue();
+			var startPosition = 14;
+			var endPosition = 35;
+			var obstacalesPostions = new[] { 16,26,28,34 };
+			grid.SetObstacles(obstacalesPostions);
 
 
-        
-    }
+			//ACT
+			var t = grid.FindPath(startPosition, endPosition);
+
+			//ASSERT
+			t.Count.ShouldEqual(5);
+			t.Select(x => x.Id).ShouldEqual(new[] { 14, 15, 22, 29, 35 });
+
+		}
+
+
+
+	}
 }
