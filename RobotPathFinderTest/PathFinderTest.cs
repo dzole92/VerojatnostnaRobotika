@@ -266,6 +266,47 @@ namespace RobotPathFinderTest
 
 		}
 
+		[TestMethod]
+		public void Example1() {
+			// ARRANGE
+			var grid = dummyRobotGrid();
+			grid.IsInitialized.ShouldBeTrue();
+			var startPosition = 14;
+			var endPosition = 35;
+			var obstacalesPostions = new[] { 16, 26, 28, 34, 22 };
+			grid.SetObstacles(obstacalesPostions);
+
+
+			//ACT
+			var t = grid.FindPath(startPosition, endPosition);
+
+			//ASSERT
+			t.Count.ShouldEqual(7);
+			t.Select(x => x.Id).ShouldEqual(new[] { 14, 15, 10, 17,23, 29, 35 });
+
+		}
+
+		[TestMethod]
+		public void Example2() {
+			// ARRANGE
+			var grid = dummyRobotGrid();
+			grid.IsInitialized.ShouldBeTrue();
+			var startPosition = 14;
+			var endPosition = 35;
+			var obstacalesPostions = new[] { 16, 26, 28, 34, 22, 17, 18 };
+			grid.SetObstacles(obstacalesPostions);
+
+
+			//ACT
+			var t = grid.FindPath(startPosition, endPosition);
+
+			//ASSERT
+			t.Count.ShouldEqual(6);
+			t.Select(x => x.Id).ShouldEqual(new[] { 14, 20, 27, 33, 40, 35 });
+
+		}
+
+
 
 
 	}

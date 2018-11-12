@@ -113,9 +113,6 @@ namespace RobotPathFinder {
 				ClosedNodes.Add(currentNode);
 				OpenNodes.Remove(currentNode);
 				currentNode = SelectNextNode(currentNode);
-				if (currentNode.Id == 29) {
-					Console.Write("v");
-				}
 			}
 
 			if (currentNode == null) throw new Exception("Cannot reach the end.");
