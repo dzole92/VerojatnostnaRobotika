@@ -97,7 +97,7 @@ namespace RobotPathFinder {
 			if (FindNeighbours(currentNode).Count <= 0) return OpenNodes.LastOrDefault();
 			var neighboursList = currentNode.Neighbours.Where(x => !ClosedNodes.Contains(x, nodeComparer)).ToList();
 			OpenNodes.AddRange(neighboursList.Where(x => !OpenNodes.Contains(x, nodeComparer)));
-			return neighboursList.OrderBy(x => x.Fn).ThenBy(x => x.Id).FirstOrDefault() ?? OpenNodes.LastOrDefault();
+			return OpenNodes.OrderBy(x => x.Fn).ThenBy(x => x.Id).FirstOrDefault();
 		}
 
 		public List<Node> FindPath(Node start, Node end) {
