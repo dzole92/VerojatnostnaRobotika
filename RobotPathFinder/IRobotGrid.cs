@@ -31,6 +31,7 @@ namespace RobotPathFinder {
 
 		void SetObstacles(NodePosition[] obstacalesPostions);
 		void SetObstacles(int[] obstacalesPostions);
+		void SetObstacles(int obstacalesPostions);
 
 	}
 }

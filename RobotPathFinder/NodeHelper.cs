@@ -29,7 +29,7 @@ namespace RobotPathFinder {
 				new NodePosition {X = x, Y = y + 1, AdditionalData = MoveType.Vertical.ToString("G")},
 				new NodePosition {X = x - 1, Y = y + 1, AdditionalData = MoveType.Diagonal.ToString("G")},
 				new NodePosition {X = x - 1, Y = y, AdditionalData = MoveType.Horizontal.ToString("G")}
-			}.Where(p => p.X >= 0 && p.X < sizeX && p.Y >= 0 && p.Y < sizeY).ToList();
+			}.Where(p => p.X >= 0 && p.X < sizeY && p.Y >= 0 && p.Y < sizeX).ToList();
 		}
 
 		public static MoveType CalculateMoveType(this Node currentNode, Node node, IRobotGrid grid) {

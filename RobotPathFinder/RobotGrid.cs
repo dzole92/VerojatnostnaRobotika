@@ -30,15 +30,15 @@ namespace RobotPathFinder {
 
 
 		public void Initialize(int x, int y, int horizontalCost, int verticalCost, int diagonalCost) {
-			SizeX = y;
-			SizeY = x;
+			SizeX = x;
+			SizeY = y;
 			HorizontalCost = horizontalCost;
 			VerticalCost = verticalCost;
 			DiagonalCost = diagonalCost;
-			AllNodes = new Node[SizeX, SizeY];
+			AllNodes = new Node[SizeY, SizeX];
 			var counter = 0;
-			for (var i = 0; i < SizeX; i++)
-				for (var j = 0; j < SizeY; j++) {
+			for (var i = 0; i < SizeY; i++)
+				for (var j = 0; j < SizeX; j++) {
 					AllNodes.SetValue(new Node(), i, j);
 					AllNodes[i, j].Initialize(++counter, new NodePosition { X = i, Y = j }, false);
 				}
@@ -147,8 +147,8 @@ namespace RobotPathFinder {
 
 		public List<Node> FindPath(int startId, int endId) {
 			Node start = new Node(), end = new Node();
-			for (int i = 0; i < SizeX; i++)
-				for (int j = 0; j < SizeY; j++) {
+			for (int i = 0; i < SizeY; i++)
+				for (int j = 0; j < SizeX; j++) {
 					if (AllNodes[i, j].Id == startId) start = AllNodes[i, j];
 					if (AllNodes[i, j].Id == endId) end = AllNodes[i, j];
 				}
@@ -172,11 +172,13 @@ namespace RobotPathFinder {
 
 		public void SetObstacles(int[] obstacalesPostions) {
 			obstacalesPostions.AsParallel().ForAll(x => {
-				for (int i = 0; i < SizeX; i++)
-				for (int j = 0; j < SizeY; j++)
+				for (int i = 0; i < SizeY; i++)
+				for (int j = 0; j < SizeX; j++)
 					if (AllNodes[i, j].Id == x) AllNodes[i, j].IsUnavailable = true;
 			});
 		}
+
+		public void SetObstacles(int obstacalesPostions) { SetObstacles(new[] {obstacalesPostions}); }
 
 	}
 
