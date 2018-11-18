@@ -122,7 +122,8 @@ namespace RobotPathFinder {
 			while (nod != null && !nod.Equals(StartNode)) {
 				pathList.Add(nod);
 				if (!nod.Neighbours.Any()) nod.FindNeighbours(this);
-				nod = nod.Neighbours.OrderBy(x => x.Fn).FirstOrDefault(x => !(x.IsUnavailable ?? false));
+				// nod = nod.Neighbours.OrderBy(x => x.Fn).FirstOrDefault(x => !(x.IsUnavailable ?? false));
+				nod = nod.Parent;
 			}
 			if (nod == null) throw new Exception("Something went wrong. !!!!");
 			pathList.Add(StartNode);
