@@ -180,7 +180,24 @@ namespace RobotPathFinder {
 		}
 
 		public void SetObstacles(int obstacalesPostions) { SetObstacles(new[] {obstacalesPostions}); }
+	    public void MakeAvailable(int nodeId)
+	    {
+	        for (int i = 0; i < SizeY; i++)
+	        for (int j = 0; j < SizeX; j++)
+	            if (AllNodes[i, j].Id == nodeId) AllNodes[i, j].IsUnavailable = false;
+        }
 
+	    public bool ToggleObsticle(int nodeId)
+	    {
+            
+	        for (int i = 0; i < SizeY; i++)
+	        for (int j = 0; j < SizeX; j++)
+	            if (AllNodes[i, j].Id == nodeId) {
+                    AllNodes[i, j].IsUnavailable = !AllNodes[i, j].IsUnavailable;
+	                return AllNodes[i, j].IsUnavailable ?? false;
+	            }
+	        return false;
+	    }
 	}
 
 

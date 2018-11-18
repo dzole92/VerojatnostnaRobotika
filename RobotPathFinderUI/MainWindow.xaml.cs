@@ -111,16 +111,29 @@ namespace RobotPathFinderUI
 			var node = sender as NodeLabel;
 			if (node == null || !robotGrid.IsInitialized) return;
 			if (btnSetBlock.IsChecked ?? false) {
-				robotGrid.SetObstacles(node.Id);
-				node.Background = new SolidColorBrush(Colors.Red);
-			}
+				var res = robotGrid.ToggleObsticle(node.Id);
+				node.Background = res ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Gray);
+			    if (end != null && Equals(end, node)) {
+			        end = null;
+			    } else if (star != null && Equals(star, node)) {
+			        star = null;
+			    }
+            }
 			if (btnSetStart.IsChecked ?? false) {
 				star = node;
 				node.Background = new SolidColorBrush(Colors.Green);
+			    robotGrid.MakeAvailable(node.Id);
+                if (end != null && Equals(end, node)) {
+			        end = null;
+			    }
 			} else if (btnSetEnd.IsChecked ?? false) {
 				end = node;
 				node.Background = new SolidColorBrush(Colors.Blue);
-			}
+			    robotGrid.MakeAvailable(node.Id);
+                if (star != null && Equals(star, node)) {
+                    star = null;
+                }
+            }
 		}
 
 		private bool ValidateInputs() => !string.IsNullOrEmpty(txtSizeX.Text) 
