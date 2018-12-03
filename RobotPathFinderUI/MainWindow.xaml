@@ -23,6 +23,7 @@
         <TextBox x:Name="txtDiagonalCost" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="14" VerticalAlignment="Top" Width="52" Margin="647,104,0,0"/>
         <Label x:Name="label_Copy3" Content="Diagonal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="642,78,0,0"/>
         <Grid x:Name="nodeGrid" HorizontalAlignment="Left" Width="506" Margin="0,0,0,10"/>
+        <Label x:Name="label1" Content="Vladimirov Gjorgji" Margin="0,0,15,10" Height="26" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="152" FontFamily="Showcard Gothic" FontStyle="Italic" Background="White" Foreground="#FFA22727"/>
 
     </Grid>
 </Window>

@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RobotPathFinderTest")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Vladimirov Gjorgji")]
 [assembly: AssemblyProduct("RobotPathFinderTest")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyCopyright("Copyright ©  2018 Vladimirov Gjorgji")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("RobotPathFinderUI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany(" V l a d i m i r o v    G j o r g j i")]
 [assembly: AssemblyProduct("RobotPathFinderUI")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyCopyright("Copyright ©  2018 Vladimirov Gjorgji")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
